@@ -2,7 +2,7 @@
 // @name         SO Horizontal Comment Action
 // @author       Jason C
 // @description  Put comment flag icon next to vote icon instead of below it.
-// @version      0.4
+// @version      0.5
 // @namespace    
 // @include http*://*.stackexchange.com*
 // @include http*://*.stackoverflow.com*
@@ -16,22 +16,52 @@
 // @grant        none
 // ==/UserScript==
 
-var actions = document.querySelectorAll('.comment-actions');
 
-for (var n = 0; n < actions.length; ++ n) {
+// Adjusts comment action formatting. 'actions' is a list of .comment-actions tables.
+
+function modifyCommentActions (actions) {
     
-    // find second td of second tr (the flag icon), move it to first tr (next to vote action),
-    // then remove second tr (now unused).
-    var parent = actions[n].getElementsByTagName('tbody')[0];
-    var rows = parent.getElementsByTagName('tr');
-    var dsttr = rows[0];
-    var srctr = rows[1];
-    if (!srctr) // your own comments won't have this row (you can't flag them).
-        continue;
-    var srctd = srctr.getElementsByTagName('td')[1];
+    for (var n = 0; n < actions.length; ++ n) {
     
-    srctr.removeChild(srctd);
-    dsttr.appendChild(srctd);
-    parent.removeChild(srctr);
-    
+        // find second td of second tr (the flag icon), move it to first tr (next to vote action),
+        // then remove second tr (now unused).
+        var parent = actions[n].getElementsByTagName('tbody')[0];
+        var rows = parent.getElementsByTagName('tr');
+        var dsttr = rows[0];
+        var srctr = rows[1];
+        if (!srctr) // your own comments won't have this row (you can't flag them).
+            continue;
+        var srctd = srctr.getElementsByTagName('td')[1];
+        
+        srctr.removeChild(srctd);
+        dsttr.appendChild(srctd);
+        parent.removeChild(srctr);
+        
+    }
+
+}
+
+
+// Apply formatting to all pre-existing comment blocks.
+
+modifyCommentActions(document.querySelectorAll('.comment-actions'));
+
+
+// Watch for changes to apply formatting to new comment blocks (e.g. when showing hidden commments).
+
+var commentObserver = new MutationObserver(function(mutations) {
+    for (var k = 0; k < mutations.length; ++ k) {
+        modifyCommentActions(mutations[k].target.querySelectorAll('.comment-actions'));
+    }
+});
+
+var commentBlocks = document.querySelectorAll('div.comments table tbody');
+for (var k = 0; k < commentBlocks.length; ++ k) {
+    var options = {
+        subtree: false,
+        childList: true, 
+        attributes: false,
+        characterData: false,
+    }
+    commentObserver.observe(commentBlocks[k], options);
 }
