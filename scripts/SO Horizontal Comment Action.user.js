@@ -1,5 +1,7 @@
 // ==UserScript==
-// @name         SO Horizontal Comment Action 
+// @name         SO Horizontal Comment Action
+// @author       Jason C
+// @description  Put comment flag icon next to vote icon instead of below it.
 // @namespace    
 // @include      *stackoverflow.*
 // @grant        none
