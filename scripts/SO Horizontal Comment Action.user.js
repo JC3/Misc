@@ -56,12 +56,12 @@ var commentObserver = new MutationObserver(function(mutations) {
 });
 
 var commentBlocks = document.querySelectorAll('div.comments table tbody');
+var options = {
+    subtree: false,
+    childList: true, 
+    attributes: false,
+    characterData: false,
+}
 for (var k = 0; k < commentBlocks.length; ++ k) {
-    var options = {
-        subtree: false,
-        childList: true, 
-        attributes: false,
-        characterData: false,
-    }
     commentObserver.observe(commentBlocks[k], options);
 }
