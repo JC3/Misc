@@ -2,6 +2,7 @@
 // @name         SO Horizontal Comment Action
 // @author       Jason C
 // @description  Put comment flag icon next to vote icon instead of below it.
+// @version      0.3
 // @namespace    
 // @include http*://*.stackexchange.com*
 // @include http*://*.stackoverflow.com*
@@ -19,7 +20,8 @@ var actions = document.querySelectorAll('.comment-actions');
 
 for (var n = 0; n < actions.length; ++ n) {
     
-    // find second td of second tr, move it to first tr, then remove second tr.
+    // find second td of second tr (the flag icon), move it to first tr (next to vote action),
+    // then remove second tr (now unused).
     
     var parent = actions[n].getElementsByTagName('tbody')[0];
     var rows = parent.getElementsByTagName('tr');
