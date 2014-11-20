@@ -2,7 +2,7 @@
 // @name         SO Horizontal Comment Action
 // @author       Jason C
 // @description  Put comment flag icon next to vote icon instead of below it.
-// @version      0.5
+// @version      0.6
 // @namespace    
 // @include http*://*.stackexchange.com*
 // @include http*://*.stackoverflow.com*
@@ -29,13 +29,13 @@ function modifyCommentActions (actions) {
         var rows = parent.getElementsByTagName('tr');
         var dsttr = rows[0];
         var srctr = rows[1];
-        if (!srctr) // your own comments won't have this row (you can't flag them).
-            continue;
-        var srctd = srctr.getElementsByTagName('td')[1];
-        
-        srctr.removeChild(srctd);
-        dsttr.appendChild(srctd);
-        parent.removeChild(srctr);
+  
+        if (srctr) { // your own comments won't have this row (you can't flag them).
+            var srctd = srctr.getElementsByTagName('td')[1];        
+            srctr.removeChild(srctd);
+            dsttr.appendChild(srctd);
+            parent.removeChild(srctr);
+        }
         
     }
 
@@ -50,18 +50,20 @@ modifyCommentActions(document.querySelectorAll('.comment-actions'));
 // Watch for changes to apply formatting to new comment blocks (e.g. when showing hidden commments).
 
 var commentObserver = new MutationObserver(function(mutations) {
-    for (var k = 0; k < mutations.length; ++ k) {
-        modifyCommentActions(mutations[k].target.querySelectorAll('.comment-actions'));
-    }
+    mutations.forEach(function (mutation) {
+        modifyCommentActions(mutation.target.querySelectorAll('.comment-actions'));
+    });
 });
 
 var commentBlocks = document.querySelectorAll('div.comments table tbody');
-var options = {
+
+var observerOptions = {
     subtree: false,
     childList: true, 
     attributes: false,
     characterData: false,
 }
+
 for (var k = 0; k < commentBlocks.length; ++ k) {
-    commentObserver.observe(commentBlocks[k], options);
+    commentObserver.observe(commentBlocks[k], observerOptions);
 }
