@@ -17,5 +17,5 @@
 
 var style = document.createElement('style');
 style.type = 'text/css';
-style.innerHTML = '.post-text a { border-bottom: 1px dotted #808080; }');
+style.innerHTML = '.post-text a { border-bottom: 1px dotted #808080; }';
 document.head.appendChild(style);
