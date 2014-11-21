@@ -2,7 +2,7 @@
 // @name         SO Horizontal Comment Action
 // @author       Jason C
 // @description  Put comment flag icon next to vote icon instead of below it.
-// @version      0.6
+// @version      0.7
 // @namespace    
 // @include http*://*.stackexchange.com*
 // @include http*://*.stackoverflow.com*
@@ -15,6 +15,8 @@
 // @include http*://stackapps.com*
 // @grant        none
 // ==/UserScript==
+
+var HORIZONTAL_SPACING = '0.75ex';  // <-- Change this to adjust horizontal spacing between icons.
 
 
 // Adjusts comment action formatting. 'actions' is a list of .comment-actions tables.
@@ -40,6 +42,14 @@ function modifyCommentActions (actions) {
     }
 
 }
+
+
+// Horizontal spacing.
+
+var style = document.createElement('style');
+style.type = 'text/css';
+style.innerHTML = '.comment-actions td~td {padding-left:'+HORIZONTAL_SPACING+';}';
+document.head.appendChild(style);
 
 
 // Apply formatting to all pre-existing comment blocks.
